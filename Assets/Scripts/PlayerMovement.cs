@@ -4,10 +4,14 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
+    public GameObject camera;
+    public float speed = 20.0f;
+    public float jumpTimes = 1.5f;
+    public int jumpCooldown = 2;
     private Rigidbody2D rb;
     private SpriteRenderer rend;
-    public float speed = 10.0f;
-    public float jumpTimes = 3.0f;
+    private int canJumpCounter = 0;
+    private int maxJumpCounter = 2;
 
     // Start is called before the first frame update
     void Start()
@@ -25,9 +29,20 @@ public class PlayerMovement : MonoBehaviour
             rend.flipX = moveHorizontal < 0;
         }
 
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.Space) && canJumpCounter < maxJumpCounter)
         {
             rb.velocity = new Vector2 (0.0f, speed * jumpTimes);
+            canJumpCounter += 1;
+        }
+
+        camera.transform.position = new Vector3(this.transform.position.x, this.transform.position.y, camera.transform.position.z);
+    }
+
+    void OnCollisionEnter2D(Collision2D collision) 
+    {
+        if (collision.gameObject.tag == "Ground")
+        {
+            canJumpCounter = 0;
         }
     }
 }
