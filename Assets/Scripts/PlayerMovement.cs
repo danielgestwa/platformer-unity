@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
-    public GameObject camera;
     public float speed = 20.0f;
     public float jumpTimes = 1.5f;
     public int jumpCooldown = 2;
@@ -12,6 +11,7 @@ public class PlayerMovement : MonoBehaviour
     private SpriteRenderer rend;
     private int canJumpCounter = 0;
     private int maxJumpCounter = 2;
+    private bool isWallTouched = false;
 
     // Start is called before the first frame update
     void Start()
@@ -24,7 +24,8 @@ public class PlayerMovement : MonoBehaviour
     void Update()
     {
         float moveHorizontal = Input.GetAxis ("Horizontal");
-        rb.velocity = new Vector2 (moveHorizontal * speed, rb.velocity.y);
+        rb.velocity = new Vector2 (moveHorizontal * (isWallTouched ? 1 : speed), rb.velocity.y);
+        
         if(moveHorizontal < 0 || moveHorizontal > 0) {
             rend.flipX = moveHorizontal < 0;
         }
@@ -35,7 +36,6 @@ public class PlayerMovement : MonoBehaviour
             canJumpCounter += 1;
         }
 
-        camera.transform.position = new Vector3(this.transform.position.x, this.transform.position.y, camera.transform.position.z);
     }
 
     void OnCollisionEnter2D(Collision2D collision) 
@@ -43,6 +43,19 @@ public class PlayerMovement : MonoBehaviour
         if (collision.gameObject.tag == "Ground")
         {
             canJumpCounter = 0;
+        }
+
+        if (collision.gameObject.tag == "Wall")
+        {
+            isWallTouched = true;
+        }
+    }
+
+    void OnCollisionExit2D(Collision2D collision) 
+    {
+        if (collision.gameObject.tag == "Wall")
+        {
+            isWallTouched = false;
         }
     }
 }
