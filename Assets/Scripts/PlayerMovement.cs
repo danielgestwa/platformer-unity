@@ -7,10 +7,13 @@ public class PlayerMovement : MonoBehaviour
     public float speed = 20.0f;
     public float jumpTimes = 1.5f;
     public int jumpCooldown = 2;
+    public bool isDead = false;
+    public bool nextStage = false;
     private Rigidbody2D rb;
     private SpriteRenderer rend;
     private int canJumpCounter = 0;
-    private int maxJumpCounter = 2;
+    private int maxJumpCounter = 1;
+    private int minPosY = -4;
     private bool isWallTouched = false;
 
     // Start is called before the first frame update
@@ -36,6 +39,10 @@ public class PlayerMovement : MonoBehaviour
             canJumpCounter += 1;
         }
 
+        if(this.transform.position.y < minPosY) {
+            isDead = true;
+        }
+
     }
 
     void OnCollisionEnter2D(Collision2D collision) 
@@ -48,6 +55,16 @@ public class PlayerMovement : MonoBehaviour
         if (collision.gameObject.tag == "Wall")
         {
             isWallTouched = true;
+        }
+
+        if (collision.gameObject.tag == "Enemies")
+        {
+            isDead = true;
+        }
+
+        if(collision.gameObject.tag == "Finish")
+        {
+            nextStage = true;
         }
     }
 

@@ -5,18 +5,26 @@ using UnityEngine.SceneManagement;
 
 public class Game : MonoBehaviour
 {
-    public GameObject player;
-    // Start is called before the first frame update
-    void Start()
-    {
-        
+    public PlayerMovement player;
+    private Dictionary<string, string> scenes = new Dictionary<string, string>();
+    private string currentSceneName;
+
+    void Start() {
+        currentSceneName = SceneManager.GetActiveScene().name;
+        scenes["SampleScene"] = "Level2";
     }
 
     // Update is called once per frame
     void Update()
     {
-        if(player.transform.position.y < -4) {
-            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        if(player.isDead) {
+            SceneManager.LoadScene(currentSceneName);
+        }
+
+        if(player.nextStage) {
+            if(scenes.ContainsKey(currentSceneName)) {
+                SceneManager.LoadScene(scenes[currentSceneName]);
+            }
         }
     }
 }
