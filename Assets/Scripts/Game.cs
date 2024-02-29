@@ -21,10 +21,11 @@ public class Game : MonoBehaviour
             SceneManager.LoadScene(currentSceneName);
         }
 
-        if(player.nextStage) {
-            if(scenes.ContainsKey(currentSceneName)) {
-                SceneManager.LoadScene(scenes[currentSceneName]);
-            }
+        if(player.nextStage || Input.GetKeyDown(KeyCode.Escape)) {
+            // if(scenes.ContainsKey(currentSceneName)) {
+            //     SceneManager.LoadScene(scenes[currentSceneName]);
+            // }
+            Application.Quit();
         }
     }
 }
