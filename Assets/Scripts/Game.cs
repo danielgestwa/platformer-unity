@@ -11,7 +11,8 @@ public class Game : MonoBehaviour
 
     void Start() {
         currentSceneName = SceneManager.GetActiveScene().name;
-        scenes["SampleScene"] = "Level2";
+        scenes.Add("Level 1", "Level 2");
+        scenes.Add("Level 2", "Level 3");
     }
 
     // Update is called once per frame
@@ -21,10 +22,13 @@ public class Game : MonoBehaviour
             SceneManager.LoadScene(currentSceneName);
         }
 
-        if(player.nextStage || Input.GetKeyDown(KeyCode.Escape)) {
-            // if(scenes.ContainsKey(currentSceneName)) {
-            //     SceneManager.LoadScene(scenes[currentSceneName]);
-            // }
+        if(player.nextStage) {
+            if(scenes.ContainsKey(currentSceneName)) {
+                SceneManager.LoadScene(scenes[currentSceneName]);
+            }
+        }
+
+        if(Input.GetKeyDown(KeyCode.Escape)) {
             Application.Quit();
         }
     }
